@@ -1,0 +1,8 @@
+- name: 'deviceMagic deployment'
+  hosts: '*'
+  gather_facts: false
+  become: true
+  become_user: root
+  tasks:
+  - name: script
+    
