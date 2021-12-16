@@ -27,35 +27,13 @@ k3d cluster create local-dev  \
 --agents 3 \
 --registry-config reg-config.yml \
 --wait
-# --k3s-arg '--flannel-backend=none@server:*' \
-# --k3s-arg "--cluster-cidr=10.118.0.0/17@server:*" \
-# --k3s-arg "--service-cidr=10.118.128.0/17@server:*" \
-  # podSubnet: "10.240.0.0/16"
-  # podSubnet: 192.168.0.0/16 # set to Calico's default subnet
-  # serviceSubnet: "10.0.0.0/16"
-# --k3s-arg "--tls-san=kubedev@server:*" \
-# --volume "$(pwd)/docs/usage/guides/calico.yaml:/var/lib/rancher/k3s/server/manifests/calico.yaml"
-# --no-lb 
-# --volume /etc/resolv.conf:/etc/resolv.conf@server:0 \
-# --registry-use k3d-registry.localhost:5000 \
 
-# https://k3d.io/v5.0.0/usage/advanced/calico/
-# https://projectcalico.docs.tigera.io/master/reference/cni-plugin/configuration
-# "container_settings": {
-#     "allow_ip_forwarding": true
-# }
 
   mkdir -p /home/vagrant/.kube && \
       k3d kubeconfig get local-dev > /home/vagrant/.kube/config && \
       chown -R vagrant:vagrant /home/vagrant/.kube
 
-# --k3s-arg "--cluster-domain=cluster.local@loadbalancer" \
-
-# istioctl install --set profile=demo -y
-# k apply -f https://github.com/knative/operator/releases/download/knative-v1.0.0/operator.yaml
 kubectl config set-context --current --namespace=default
-
-# k apply -f https://k3d.io/v5.0.0/usage/advanced/calico.yaml
 
 cd /vagrant/mkcert/demo3.example.com
 export CERT_NAME=demo3.example.com
@@ -63,11 +41,10 @@ export KEY_FILE=demo3.example.com+1-key.pem
 export CERT_FILE=demo3.example.com+1.pem
 kubectl create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
-cd -
-
-
-
+# cd -
 
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
+
+helm uninstall ingress-nginx --namespace ingress-nginx

@@ -1,17 +1,34 @@
 # K3D VM on windows
 
-
 # vagrant VM
 
-* IP : 192.168.63.11
+* IP : 192.168.56.2
 * public_key: ~/.ssh/id_rsa.pub
 * user: vagrant
 
-## Prepare a domain name and ssl cert
+## MacOSX
 
-use `mkcert` to have a root-certificate trusted by all machines on local dev env
-```bash 
-choco install mkcert
+```bash
+brew tap homebrew/cask
+brew install --cask vagrant
+brew install --cask virtualbox
+brew install mkcert
+brew install nss
+
+# sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart --> allow in preference security
+# restart computer
+
+cp .env.default .env
+echo "$(openssl rand -base64 20)" > .vault-pass
+
+# create root cert and copy to project
+
+
+```
+
+## Both windows and macos
+
+```bash
 mkcert -install
 mkdir -p sync/mkcert/rootca
 rootdir=$PWD
@@ -20,8 +37,16 @@ cp -r ./* "$rootdir/sync/mkcert/rootca"
 mkdir -p sync/mkcert/demo3.example.com
 cd sync/mkcert/demo3.example.com
 mkcert demo3.example.com "*.demo3.example.com"
+```
+
+## Windows
+
+use `mkcert` to have a root-certificate trusted by all machines on local dev env
+```bash 
+choco install mkcert
+
 # on the kube host machine
-CAROOT=/vagrant/mkcert mkcert -install
+CAROOT=/vagrant/mkcert/rootca mkcert -install
 
 
 # fix dns on netplan
@@ -39,6 +64,10 @@ network:
 EOF
 
 ```
+
+## Prepare a domain name and ssl cert
+
+
 
 ## check scripts/install-tools.sh to install all fancy tools
 

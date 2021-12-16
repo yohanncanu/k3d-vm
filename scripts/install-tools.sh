@@ -39,11 +39,15 @@ echo 'EDITOR="code --wait"' >> ~/.bashrc
 # istioctl
 curl -L https://istio.io/downloadIstio | sh -
 echo 'export PATH=$PATH:/home/vagrant/istio-1.12.1/bin' >>/home/vagrant/.bashrc
-# kn
+
+# go install
 curl -Lo go1.17.4.linux-amd64.tar.gz https://go.dev/dl/go1.17.4.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go 
 sudo tar -C /usr/local -xzf go1.17.4.linux-amd64.tar.gz
 echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/vagrant/.bashrc
+
+# kn
+
 sudo apt-get install build-essential -y
 git clone https://github.com/knative/client.git
 cd /home/vagrant/client/
